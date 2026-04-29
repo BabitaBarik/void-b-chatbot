@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="script.js" defer></script>
+    <title>Sign-up</title>
+</head>
+<body>
+   <div class="wrapper">
+    <h1>Sign-up</h1>
+    <p id="error-message"></p>
+    <form id="form">
+        <div>
+            <label for="User_name-input">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#bcdf90"><path d="M720-400v-120H600v-80h120v-120h80v120h120v80H800v120h-80ZM247-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Z"/></svg>
+            </label>
+            <input required type="text" name="User_name" id="User_name-input" placeholder="User_name">
+        </div>
+        <div>
+            <label for="email-input">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#bcdf90"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280 320-200v-80L480-520 160-720v80l320 200Z"/></svg>
+            </label>
+            <input required type="email" name="email" id="email-input" placeholder="Email">
+        </div>
+        <div>
+            <label for="password">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#bcdf90"><path d="M120-160v-112q0-34 17.5-62.5T184-378q62-31 126-46.5T440-440q20 0 40 1.5t40 4.5q-4 58 21 109.5t73 84.5v80H120ZM760-40l-60-60v-186q-44-13-72-49.5T600-420q0-58 41-99t99-41q58 0 99 41t41 99q0 45-25.5 80T790-290l50 50-60 60 60 60-80 80ZM440-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm328.5 68.5Q780-423 780-440t-11.5-28.5Q757-480 740-480t-28.5 11.5Q700-457 700-440t11.5 28.5Q723-400 740-400t28.5-11.5Z"/></svg>
+            </label>
+            <input required type="password" name="password" id="password" placeholder="Password">
+        </div>
+        <button type="submit" onclick="if(document.getElementById('form').checkValidity()) window.location.href='filter.html'">Sign-UP</button>
+    </form>
+    <p>Already have an account? <a class="login" href="login.html">LOGIN</a></p>
+   </div>
+</body>
+</html>
