@@ -1,71 +1,471 @@
-* {
-    margin: 0;
-    padding: 0;
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Orbitron:wght@400;700;900&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+    --accent-color: #49651b;
+    --text-color:   #649b0d;
+    --bright:       #bcdf90;
+    --card-glow:    rgba(100,155,13,0.18);
+    --bg:           #0a0a0a;
+    --bg2:          #0f0f0f;
+    --bg3:          #111;
 }
 
 body {
-    background-color: #0a0a0a;
+    background-color: var(--bg);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 20px;
-    padding: 60px 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    gap: 28px;
+    padding: 50px 0;
+    font-family: 'Space Mono', monospace;
 }
 
+/* ═══════════════════════════════════════════════
+   PAGE HEADER
+═══════════════════════════════════════════════ */
+.page-header {
+    text-align: center;
+    padding: 0 20px;
+}
+.page-header h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+    color: var(--text-color);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+.page-header p {
+    font-size: 0.72rem;
+    color: rgba(188,223,144,0.45);
+    letter-spacing: 0.12em;
+}
+
+/* ═══════════════════════════════════════════════
+   UPPER SECTION — search + chat stacked
+═══════════════════════════════════════════════ */
+.upper-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+
+
+/* ═══════════════════════════════════════════════
+   CAROUSEL — BOOK COVERS (GPU-accelerated, no lag)
+═══════════════════════════════════════════════ */
 .carousel {
     width: 100%;
     border-top: 1px solid #49651b;
     border-bottom: 1px solid #49651b;
     display: flex;
     overflow: hidden;
-    background-color: #0f0f0f;
+    background: var(--bg2);
+    /* isolate stacking context so GPU compositing is applied per carousel */
+    isolation: isolate;
 }
 
 .group {
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    gap: 1em;
-    padding: 1em;
-    animation: scroll-left 10s infinite linear;
+    gap: 10px;
+    padding: 10px;
+    /* GPU layer promotion — eliminates paint-on-every-frame lag */
+    will-change: transform;
+    backface-visibility: hidden;
+    animation: scroll-left 28s linear infinite;
 }
-
 .group--reverse {
-    animation: scroll-right 10s infinite linear;
+    animation: scroll-right 28s linear infinite;
 }
 
-.card {
-    flex: 0 0 5em;
-    height: 5em;
-    background: transparent;
-    border: 1px solid #49651b;
-    color: #bcdf90;
-    font-size: 3rem;
-    border-radius: .3em;
-    text-align: center;
-    align-content: center;
-    transition: background 150ms ease;
-    box-shadow: 0 0 8px rgba(100, 155, 13, 0.15);
+/* ── Book cover card ──────────────────────────── */
+.card-cover {
+    flex: 0 0 72px;
+    height: 100px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(73,101,27,0.5);
+    position: relative;
+    cursor: pointer;
+    transition: box-shadow 150ms, transform 150ms;
+    background: #0c0c0c;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
-.card--alt {
-    border-color: #649b0d;
-    color: #649b0d;
-    box-shadow: 0 0 8px rgba(73, 101, 27, 0.2);
+.card-cover img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 300ms ease;
+    /* prevent img from causing layout recalc during animation */
+    will-change: transform;
 }
-
-.card:hover {
-    background: rgba(73, 101, 27, 0.2);
+.card-cover:hover {
+    box-shadow: 0 0 18px rgba(100,155,13,0.45);
+    transform: translateY(-4px) scale(1.05);
+    border-color: var(--text-color);
+    z-index: 2;
 }
+.card-cover:hover img { transform: scale(1.06); }
 
+.cover-fallback {
+    position: absolute;
+    font-size: 2rem;
+    display: none;
+}
+.card-cover--fallback .cover-fallback { display: block; }
+
+.card-cover--alt { border-color: rgba(100,155,13,0.45); }
+.card-cover--alt:hover { border-color: var(--bright); }
+
+/* Pause on hover */
+.carousel:hover .group { animation-play-state: paused; }
+
+/* Glow shimmer overlay on hover */
+.card-cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(100,155,13,0) 0%, rgba(100,155,13,0.12) 100%);
+    opacity: 0;
+    transition: opacity 200ms;
+    border-radius: 4px;
+}
+.card-cover:hover::after { opacity: 1; }
+
+/* Keyframes use translate3d for hardware acceleration */
 @keyframes scroll-left {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-100%); }
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-100%, 0, 0); }
+}
+@keyframes scroll-right {
+    from { transform: translate3d(-100%, 0, 0); }
+    to   { transform: translate3d(0, 0, 0); }
 }
 
-@keyframes scroll-right {
-    from { transform: translateX(-100%); }
-    to   { transform: translateX(0); }
+/* ═══════════════════════════════════════════════
+   CHAT SECTION
+═══════════════════════════════════════════════ */
+.chat-section {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.chat-container {
+    width: min(720px,100%);
+    background: var(--bg2);
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 30px rgba(73,101,27,0.12);
+}
+.chat-header {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--accent-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    flex-wrap: wrap;
+}
+.chat-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--text-color);
+    animation: pulse 2s infinite;
+    flex-shrink: 0;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.chat-header > span:first-of-type {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.63rem; letter-spacing: 0.2em;
+    color: var(--text-color); text-transform: uppercase;
+}
+.chat-hint {
+    font-size: 0.6rem !important;
+    color: rgba(188,223,144,0.35) !important;
+    letter-spacing: 0.05em !important;
+    margin-left: auto;
+}
+.chat-messages {
+    min-height: 240px; max-height: 360px;
+    overflow-y: auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) transparent;
+}
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 2px; }
+
+.msg {
+    max-width: 78%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.76rem;
+    line-height: 1.55;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.msg--bot {
+    align-self: flex-start;
+    background: rgba(73,101,27,0.13);
+    border: 1px solid rgba(73,101,27,0.38);
+    color: var(--bright);
+}
+.msg--user {
+    align-self: flex-end;
+    background: rgba(100,155,13,0.18);
+    border: 1px solid rgba(100,155,13,0.45);
+    color: #ddf0b0;
+}
+
+/* ── Chat inline book cards ───────────────────── */
+.chat-book-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 4px 0;
+}
+.chat-book-card {
+    display: flex;
+    gap: 8px;
+    background: rgba(15,15,15,0.95);
+    border: 1px solid rgba(73,101,27,0.45);
+    border-radius: 6px;
+    overflow: hidden;
+    width: calc(50% - 4px);
+    min-width: 200px;
+    flex: 1 1 200px;
+    transition: box-shadow 150ms, transform 150ms;
+}
+.chat-book-card:hover {
+    box-shadow: 0 0 14px var(--card-glow);
+    transform: translateY(-2px);
+}
+.chat-book-card img {
+    width: 52px;
+    min-width: 52px;
+    height: 74px;
+    object-fit: cover;
+    object-position: top;
+    border-right: 1px solid rgba(73,101,27,0.35);
+}
+.cbc-no-thumb {
+    width: 52px; min-width: 52px; height: 74px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    background: #0c0c0c;
+    border-right: 1px solid rgba(73,101,27,0.35);
+}
+.cbc-info {
+    padding: 8px 8px 8px 4px;
+    display: flex; flex-direction: column; gap: 3px;
+    overflow: hidden;
+}
+.cbc-info strong {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.58rem; color: var(--bright); line-height: 1.3;
+    letter-spacing: 0.02em;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.cbc-info span {
+    font-size: 0.57rem; color: rgba(188,223,144,0.5);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cbc-rating { color: #f0c040 !important; }
+.cbc-info a {
+    font-size: 0.56rem; font-family: 'Orbitron', monospace;
+    color: var(--text-color); text-decoration: none; letter-spacing: 0.06em;
+    margin-top: auto; transition: color 150ms;
+}
+.cbc-info a:hover { color: var(--bright); }
+
+/* ── Chat input row ───────────────────────────── */
+.chat-input-row {
+    display: flex;
+    border-top: 1px solid var(--accent-color);
+    background: #0c0c0c;
+}
+.chat-input-row input {
+    flex: 1 1 0; min-width: 0;
+    height: 46px; padding: 0 1em;
+    background: transparent; border: none;
+    color: var(--bright); font-family: 'Space Mono', monospace; font-size: 0.78rem;
+    outline: none;
+}
+.chat-input-row input::placeholder { color: rgba(188,223,144,0.28); font-size: 0.73rem; }
+.chat-input-row button {
+    height: 46px; padding: 0 1.2em;
+    background: var(--accent-color); border: none; border-left: 1px solid var(--accent-color);
+    color: #fff; font-family: 'Orbitron', monospace; font-size: 0.6rem; letter-spacing: 0.1em;
+    cursor: pointer; text-transform: uppercase; transition: background 150ms;
+}
+.chat-input-row button:hover { background: var(--text-color); }
+.chat-input-row button:disabled { opacity: 0.5; cursor: default; }
+
+/* ── Typing indicator ─────────────────────────── */
+.typing-indicator {
+    display: flex; gap: 4px; align-items: center;
+    padding: 10px 14px; align-self: flex-start;
+}
+.typing-indicator span {
+    display: block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-color); animation: typing 1.2s infinite;
+}
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing {
+    0%,60%,100%{ transform:translateY(0); opacity:0.4; }
+    30%{ transform:translateY(-6px); opacity:1; }
+}
+
+/* ═══════════════════════════════════════════════
+   BACK LINK
+═══════════════════════════════════════════════ */
+.back-link { text-align:center; margin-top:-10px; }
+.back-link a {
+    font-size: 0.67rem; color: rgba(188,223,144,0.35);
+    text-decoration: none; letter-spacing: 0.15em; text-transform: uppercase;
+    font-family: 'Orbitron', monospace; transition: color 150ms;
+}
+.back-link a:hover { color: var(--text-color); }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media (max-width: 640px) {
+    .chat-book-card { width: 100%; min-width: unset; }
+    .results-grid { grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); }
+    .chat-hint { display: none; }
+}
+
+/* ═══════════════════════════════════════════════
+   ALL GENRES PANEL — chip grid
+═══════════════════════════════════════════════ */
+.all-genres-panel {
+    width: 100%;
+    padding: 4px 0;
+}
+
+.genre-chip-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 4px 0;
+}
+
+.genre-chip {
+    padding: 6px 12px;
+    background: rgba(73,101,27,0.12);
+    border: 1px solid rgba(73,101,27,0.5);
+    border-radius: 20px;
+    color: var(--bright);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    cursor: pointer;
+    transition: background 150ms, border-color 150ms, transform 100ms, box-shadow 150ms;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.genre-chip:hover {
+    background: rgba(100,155,13,0.25);
+    border-color: var(--text-color);
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(100,155,13,0.3);
+}
+
+.genre-chip:active { transform: scale(0.96); }
+
+.genre-chip.chip-loading {
+    opacity: 0.5;
+    pointer-events: none;
+    animation: chipPulse 0.8s infinite;
+}
+
+@keyframes chipPulse {
+    0%,100%{ opacity:0.5; }
+    50%{ opacity:0.9; }
+}
+
+/* ═══════════════════════════════════════════════
+   BOOK SECTION LABEL (genre header above cards)
+═══════════════════════════════════════════════ */
+.book-section-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    color: var(--text-color);
+    text-transform: uppercase;
+    padding: 8px 2px 2px;
+    border-bottom: 1px solid rgba(73,101,27,0.3);
+    margin-bottom: 4px;
+}
+
+.search-status {
+    color: rgba(188,223,144,0.45);
+    font-size: 0.74rem; letter-spacing: 0.1em; padding: 12px 4px;
+}
+
+/* ═══════════════════════════════════════════════
+   SKELETON LOADING CARDS
+═══════════════════════════════════════════════ */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-thumb {
+  width: 52px;
+  min-width: 52px;
+  height: 74px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #252525 50%, #1a1a1a 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-right: 1px solid rgba(73,101,27,0.2);
+  flex-shrink: 0;
+}
+
+.skeleton-line {
+  height: 9px;
+  border-radius: 4px;
+  margin: 6px 0;
+  background: linear-gradient(90deg, #1a1a1a 25%, #252525 50%, #1a1a1a 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.skeleton-line:nth-child(2) { animation-delay: 0.1s; }
+.skeleton-line:nth-child(3) { animation-delay: 0.2s; }
+.skeleton-line:nth-child(4) { animation-delay: 0.3s; }
+
+
+.cbc-desc {
+    font-size: 0.57rem;
+    color: rgba(188,223,144,0.38);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 3px;
+    flex: 1;
 }
