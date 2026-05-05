@@ -3,49 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>VOID — B-Chatbot</title>
     <link rel="stylesheet" href="filter.css">
+    <script type="text/javascript" src="script.js" defer></script>
 </head>
 <body>
 
-<!-- Carousel 1 — scrolls left -->
-<div class="carousel">
-    <div class="group">
-        <div class="card">1</div>
-        <div class="card">2</div>
-        <div class="card">3</div>
-        <div class="card">4</div>
-        <div class="card">5</div>
-        <div class="card">6</div>
-    </div>
-    <div aria-hidden class="group">
-        <div class="card">1</div>
-        <div class="card">2</div>
-        <div class="card">3</div>
-        <div class="card">4</div>
-        <div class="card">5</div>
-        <div class="card">6</div>
+<!-- ── Page Header ─────────────────────────────── -->
+<div class="page-header">
+    <h2>VOID — B-Chatbot</h2>
+    <p>Book Search by Google Books API</p>
+</div>
+
+<!-- ── Chat Section (single unified search + chat) ───── -->
+<div class="upper-section">
+    <div class="chat-section">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-dot"></div>
+                <span>VOID Online</span>
+                <span class="chat-hint">Search books, authors, genres or just chat…</span>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-row">
+                <input type="text" id="chat-input" placeholder="Search books, authors, genres… or ask anything (Enter to send)" autocomplete="off">
+                <button id="chat-send">Search</button>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Carousel 2 — scrolls right -->
+<!-- ── Carousel 1 — scrolls left (Sci-Fi / Fantasy covers) ─────── -->
+<div class="carousel">
+    <div class="group">
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/8225261-M.jpg" alt="Dune" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🚀</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/7984916-M.jpg" alt="1984" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">📖</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/8406786-M.jpg" alt="The Hobbit" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🧙</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/10527843-M.jpg" alt="Neuromancer" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">💻</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/9255566-M.jpg" alt="Brave New World" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🌍</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/8739161-M.jpg" alt="Foundation" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🔬</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/7898938-M.jpg" alt="Fahrenheit 451" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🔥</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/8091016-M.jpg" alt="Ender's Game" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🎮</span>
+        </div>
+    </div>
+    <div aria-hidden="true" class="group">
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/8225261-M.jpg" alt="Dune" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🚀</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/7984916-M.jpg" alt="1984" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">📖</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/8406786-M.jpg" alt="The Hobbit" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🧙</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/10527843-M.jpg" alt="Neuromancer" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">💻</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/9255566-M.jpg" alt="Brave New World" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🌍</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/8739161-M.jpg" alt="Foundation" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🔬</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/7898938-M.jpg" alt="Fahrenheit 451" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🔥</span>
+        </div>
+        <div class="card-cover">
+            <img src="https://covers.openlibrary.org/b/id/8091016-M.jpg" alt="Ender's Game" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🎮</span>
+        </div>
+    </div>
+</div>
+
+<!-- ── Carousel 2 — scrolls right (Mystery / Classic covers) ────── -->
 <div class="carousel carousel--reverse">
     <div class="group group--reverse">
-        <div class="card card--alt">A</div>
-        <div class="card card--alt">B</div>
-        <div class="card card--alt">C</div>
-        <div class="card card--alt">D</div>
-        <div class="card card--alt">E</div>
-        <div class="card card--alt">F</div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8231856-M.jpg" alt="Sherlock Holmes" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🔍</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8739335-M.jpg" alt="Crime and Punishment" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">⚖️</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8228691-M.jpg" alt="Gone Girl" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🔫</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/10425318-M.jpg" alt="The Girl with the Dragon Tattoo" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🐉</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8225267-M.jpg" alt="Rebecca" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">👻</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/9312197-M.jpg" alt="Big Little Lies" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">💕</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8231540-M.jpg" alt="In Cold Blood" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">❄️</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8406785-M.jpg" alt="And Then There Were None" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🕯️</span>
+        </div>
     </div>
-    <div aria-hidden class="group group--reverse">
-        <div class="card card--alt">A</div>
-        <div class="card card--alt">B</div>
-        <div class="card card--alt">C</div>
-        <div class="card card--alt">D</div>
-        <div class="card card--alt">E</div>
-        <div class="card card--alt">F</div>
+    <div aria-hidden="true" class="group group--reverse">
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8231856-M.jpg" alt="Sherlock Holmes" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🔍</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8739335-M.jpg" alt="Crime and Punishment" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">⚖️</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8228691-M.jpg" alt="Gone Girl" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🔫</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/10425318-M.jpg" alt="The Girl with the Dragon Tattoo" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🐉</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8225267-M.jpg" alt="Rebecca" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">👻</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/9312197-M.jpg" alt="Big Little Lies" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">💕</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8231540-M.jpg" alt="In Cold Blood" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">❄️</span>
+        </div>
+        <div class="card-cover card-cover--alt">
+            <img src="https://covers.openlibrary.org/b/id/8406785-M.jpg" alt="And Then There Were None" onerror="this.parentElement.classList.add('card-cover--fallback');this.style.display='none'">
+            <span class="cover-fallback">🕯️</span>
+        </div>
     </div>
+</div>
+
+<!-- ── Back link ──────────────────────────────── -->
+<div class="back-link">
+    <a href="login.html">← Back to Login</a>
 </div>
 
 </body>
